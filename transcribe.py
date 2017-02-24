@@ -78,6 +78,7 @@ def main(speech_file):
 		for alternative in result['alternatives']:
 			return alternative['transcript'], alternative['confidence']
 			#print(u'  Alternative: {}'.format(alternative['transcript']))
+	raise ValueError('Failed to transcribe')
 	# [END send_request]
 
 

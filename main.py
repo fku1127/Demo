@@ -34,11 +34,15 @@ def main (src_dir, out_dir):
 
 			print('\t- {} -> {})'.format(ifile_path, ofile_path))
 
-			text, confidence = speech2text(ifile_path)
+			try:
+				text, confidence = speech2text(ifile_path)
+				result = u'{}, {}'.format(text, confidence)
+			except ValueError as e:
+				result = str(e)
+
 			with codecs.open(ofile_path, mode='w', encoding='utf-8') as of:
-				s = u'{}, {}'.format(text, confidence)
-				print(u'\t- {}'.format(s))
-				of.write(s)
+				print(u'\t- {}'.format(result))
+				of.write(result)
 
 if __name__ == '__main__':
 	parser = argparse.ArgumentParser()
