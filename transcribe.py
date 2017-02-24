@@ -31,65 +31,64 @@ import googleapiclient.discovery
 # Application default credentials provided by env variable
 # GOOGLE_APPLICATION_CREDENTIALS
 def get_speech_service():
-    return googleapiclient.discovery.build('speech', 'v1beta1')
+	return googleapiclient.discovery.build('speech', 'v1beta1')
 # [END authenticating]
 
 
 def main(speech_file):
-    """Transcribe the given audio file.
-    Args:
-        speech_file: the name of the audio file.
-    """
-    # [START construct_request]
-    with open(speech_file, 'rb') as speech:
-        # Base64 encode the binary audio file for inclusion in the JSON
-        # request.
-        speech_content = base64.b64encode(speech.read())
+	"""Transcribe the given audio file.
+	Args:
+		speech_file: the name of the audio file.
+	"""
+	# [START construct_request]
+	with open(speech_file, 'rb') as speech:
+		# Base64 encode the binary audio file for inclusion in the JSON
+		# request.
+		speech_content = base64.b64encode(speech.read())
 
-    service = get_speech_service()
-    service_request = service.speech().syncrecognize(
-        body={
-            'config': {
-                # There are a bunch of config options you can specify. See
-                # https://goo.gl/KPZn97 for the full list.
-                'encoding': 'LINEAR16',  # raw 16-bit signed LE samples
-                'sampleRate': 16000,  # 16 khz
-                # See http://g.co/cloud/speech/docs/languages for a list of
-                # supported languages.
-                #'languageCode': 'en-US',  # a BCP-47 language tag
-                'languageCode': 'zh-CN',  # a BCP-47 language tag
-            },
-            'audio': {
-                'content': speech_content.decode('UTF-8')
-                }
-            })
-    # [END construct_request]
-    # [START send_request]
-    response = service_request.execute()
+	service = get_speech_service()
+	service_request = service.speech().syncrecognize(
+		body={
+			'config': {
+				# There are a bunch of config options you can specify. See
+				# https://goo.gl/KPZn97 for the full list.
+				'encoding': 'LINEAR16',  # raw 16-bit signed LE samples
+				'sampleRate': 16000,  # 16 khz
+				# See http://g.co/cloud/speech/docs/languages for a list of
+				# supported languages.
+				#'languageCode': 'en-US',  # a BCP-47 language tag
+				'languageCode': 'zh-CN',  # a BCP-47 language tag
+			},
+			'audio': {
+				'content': speech_content.decode('UTF-8')
+				}
+			})
+	# [END construct_request]
+	# [START send_request]
+	response = service_request.execute()
 
-    # First print the raw json response
-    #print(json.dumps(response, indent=2))
+	# First print the raw json response
+	#print(json.dumps(response, indent=2))
 
-    # Now print the actual transcriptions
-    for result in response.get('results', []):
-        #print('Result:')
-	answer = result['alternatives'][0]
-    return answer['transcript'], answer['confidence']
-	#print(u'{} {}'.format(answer['transcript'], answer['confidence']))
+	# Now print the actual transcriptions
+	for result in response.get('results', []):
+		#answer = result['alternatives'][0]
+		#return answer['transcript'], answer['confidence']
 
-        #for alternative in result['alternatives']:
-        #    print(u'  Alternative: {}'.format(alternative['transcript']))
-    # [END send_request]
+		for alternative in result['alternatives']:
+			return alternative['transcript'], alternative['confidence']
+			#print(u'  Alternative: {}'.format(alternative['transcript']))
+	# [END send_request]
 
 
 # [START run_application]
 if __name__ == '__main__':
-    parser = argparse.ArgumentParser(
-        description=__doc__,
-        formatter_class=argparse.RawDescriptionHelpFormatter)
-    parser.add_argument(
-        'speech_file', help='Full path of audio file to be recognized')
-    args = parser.parse_args()
-    text, confidence = main(args.speech_file)
-    print(u'{} {}'.format(text, confidence))
-    # [END run_application]
+	parser = argparse.ArgumentParser(
+		description=__doc__,
+		formatter_class=argparse.RawDescriptionHelpFormatter)
+	parser.add_argument(
+		'speech_file', help='Full path of audio file to be recognized')
+	args = parser.parse_args()
+	text, confidence = main(args.speech_file)
+	print(u'{} {}'.format(text, confidence))
+	# [END run_application]
