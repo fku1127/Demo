@@ -22,6 +22,7 @@ Example usage: python transcribe.py resources/audio.raw
 import argparse
 import base64
 import json
+import time
 
 import googleapiclient.discovery
 # [END import_libraries]
@@ -47,7 +48,7 @@ def main(speech_file):
 		speech_content = base64.b64encode(speech.read())
 
 	service = get_speech_service()
-	service_request = service.speech().syncrecognize(
+	service_request = service.speech().asyncrecognize(
 		body={
 			'config': {
 				# There are a bunch of config options you can specify. See
@@ -67,17 +68,20 @@ def main(speech_file):
 	# [START send_request]
 	response = service_request.execute()
 
-	# First print the raw json response
-	#print(json.dumps(response, indent=2))
+	name = response['name']
+	service_request = service.operations().get(name=name)
+
+	while True:
+		#print('Waiting for server processing...')
+		time.sleep(1)
+		response = service_request.execute()
+		if 'done' in response and response['done']:
+			break
 
 	# Now print the actual transcriptions
-	for result in response.get('results', []):
-		#answer = result['alternatives'][0]
-		#return answer['transcript'], answer['confidence']
-
+	for result in response['response'].get('results', []):
 		for alternative in result['alternatives']:
 			return alternative['transcript'], alternative['confidence']
-			#print(u'  Alternative: {}'.format(alternative['transcript']))
 	raise ValueError('Failed to transcribe')
 	# [END send_request]
 
