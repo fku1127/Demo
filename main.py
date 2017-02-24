@@ -8,6 +8,8 @@ from os.path import basename, splitext
 
 DEFAULT_OUT_DIR = './result'
 
+sys.stdout=codecs.getwriter('utf-8')(sys.stdout)
+
 def speech2text (file):
 	return transcribe.main(file)
 
