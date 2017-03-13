@@ -20,12 +20,12 @@ def main (src_dir, out_dir):
 	src_dir = os.path.abspath(src_dir)
 	out_dir = os.path.abspath(out_dir)
 
-	print('===============================')
-	print('SRC DIR: {}'.format(src_dir))
-	print('OUT DIR: {}'.format(out_dir))
+	#print('===============================')
+	#print('-SRC DIR: {}'.format(src_dir))
+	#print('-OUT DIR: {}'.format(out_dir))
 
 	for i_root, subdirs, files in os.walk(src_dir):
-		print('--\ndir = ' + i_root)
+		#print('-dir = ' + i_root)
 		o_root = i_root.replace(src_dir, out_dir);
 
 		if not os.path.isdir(o_root): os.makedirs(o_root)
@@ -34,16 +34,16 @@ def main (src_dir, out_dir):
 			ifile_path = os.path.join(i_root, filename)
 			ofile_path = os.path.join(o_root, replace_ext(filename))
 
-			print('\t- {} -> {})'.format(ifile_path, ofile_path))
+			#print('{} -> {}'.format(ifile_path, ofile_path))
 
 			try:
 				text, confidence = speech2text(ifile_path)
 				result = u'{}, {}'.format(text, confidence)
 			except ValueError as e:
-				result = str(e)
+				result = u'{}, {}'.format(str(e), 0)
 
 			with codecs.open(ofile_path, mode='w', encoding='utf-8') as of:
-				print(u'\t- {}'.format(result))
+				print(u'{}, {}, {}'.format(ifile_path, ofile_path, result))
 				of.write(result)
 
 if __name__ == '__main__':
