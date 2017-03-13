@@ -6,7 +6,8 @@ GOLDEN="./golden"
 LOG_GOLDEN="log.golden"
 
 ##### 1. Create GOLDEN text #####
-python main.py ${IN_DIR} --out_dir=${GOLDEN} >& ${LOG_GOLDEN}
+echo '[START] SPEECH -> TEXT: GOLDEN'
+python main.py ${GOLDEN_DIR} --out_dir=${GOLDEN} >& ${LOG_GOLDEN} 2>&1
 
 
 ##### 2. Run evaluation #####
@@ -16,9 +17,10 @@ python main.py ${IN_DIR} --out_dir=${GOLDEN} >& ${LOG_GOLDEN}
 #for c in ${NOISY_CASES}
 #do
 #	in_dir=${NOISY_DIR}${c}
+#	echo '[START] SPEECH -> TEXT: '${in_dir}
 #	out_dir="out."${c}
 #	rm -rf ${out_dir}
 #	LOG_OUT=log.${c}
-#	python main.py ${in_dir} --out_dir=${out_dir} >& ${LOG_OUT}
-#	python eval.py --hyp=${LOG_OUT} --ref=${LOG_GOLDEN} >& cer.${c}
+#	python main.py ${in_dir} --out_dir=${out_dir} >& ${LOG_OUT} 2>&1
+#	python eval.py --hyp=${LOG_OUT} --ref=${LOG_GOLDEN} >& cer.${c} 2>&1
 #done
