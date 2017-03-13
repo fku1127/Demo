@@ -81,6 +81,7 @@ def main(speech_file):
 	# Now print the actual transcriptions
 	for result in response['response'].get('results', []):
 		for alternative in result['alternatives']:
+			if not 'transcript' in alternative or not 'confidence' in alternative: continue
 			return alternative['transcript'], alternative['confidence']
 	raise ValueError('Failed to transcribe')
 	# [END send_request]
