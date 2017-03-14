@@ -8,12 +8,10 @@ NOISY_DIR="/share/data/users/jiantai.chen/concat_slice/"
 NOISY_CASES="1m 2m 3m 4m 5m"
 
 ##### 1. Create GOLDEN text #####
-#echo '[START] SPEECH -> TEXT: GOLDEN'
-#python main.py ${GOLDEN_DIR} --out_dir=${GOLDEN} >& ${LOG_GOLDEN} 2>&1
-
+echo '[START] SPEECH -> TEXT: GOLDEN'
+python main.py ${GOLDEN_DIR} --out_dir=${GOLDEN} > ${LOG_GOLDEN}
 
 ##### 2. Create HYP text #####
-NOISY_CASES="2m 3m 4m 5m"
 for c in ${NOISY_CASES}
 do
 	in_dir=${NOISY_DIR}${c}
@@ -25,7 +23,6 @@ do
 done
 
 ##### 3. Run CER #####
-NOISY_CASES="1m 2m 3m 4m 5m"
 for c in ${NOISY_CASES}
 do
 	in_dir=${NOISY_DIR}${c}
