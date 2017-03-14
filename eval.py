@@ -29,10 +29,10 @@ def main (hyp_file, ref_file):
 				if float(c1) == 0 or float(c2) == 0:
 					if   float(c1) == 0 and float(c2) == 0:
 						ret = 'Failed: hyp + ref'
-						cer = -3
+						cer = -1
 					elif float(c2) == 0:
 						ret = 'Failed: ref'
-						cer = -2
+						cer = -1
 					else:
 						ret = 'Failed: hyp'
 						cer = -1
